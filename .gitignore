@@ -1,0 +1,29 @@
+# Runtime data
+data/
+out/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+setup-*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# LaTeX artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.fdb_latexmk
+*.synctex.gz
+*.fls
+*.run.xml
+*.bcf

@@ -1,0 +1,285 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "research-director": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Sisyphus Academica — autonomous research paper writing army conductor. Deploys 7+ specialized subagents including 6 novelty engines and 10 adversarial reviewers.",
+      "skills": [
+        "skill-academic-humanizer"
+      ],
+      "fallback_models": [
+        { "model": "9router/opencode-free", "variant": "think" },
+        { "model": "9router/opencode-free" },
+        { "model": "9router/primary" },
+        { "model": "9router/fast" }
+      ],
+      "permission": {
+        "bash": "allow",
+        "webfetch": "allow",
+        "task": "allow",
+        "read": "allow",
+        "write": "allow",
+        "edit": "deny",
+        "doom_loop": "ask",
+        "external_directory": {
+          "/root/sisyphus-academica/*": "allow",
+          "/root/.config/opencode/skills/humanizer/*": "allow",
+          "/tmp/opencode/*": "allow"
+        }
+      }
+    },
+    "literature-scout": {
+      "model": "9router/opencode-free",
+      "variant": "fast",
+      "description": "Multi-source literature search — arXiv, Semantic Scholar, CrossRef, OpenAlex",
+      "skills": [],
+      "fallback_models": [
+        { "model": "9router/opencode-free", "variant": "fast" },
+        { "model": "9router/fast" }
+      ],
+      "permission": {
+        "bash": "allow",
+        "webfetch": "allow",
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "writer": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Paper section writer with 41 Humanizer patterns as hard generation constraints",
+      "skills": ["humanizer", "skill-academic-humanizer"],
+      "fallback_models": [
+        { "model": "9router/opencode-free", "variant": "think" },
+        { "model": "9router/primary" }
+      ],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "webfetch": "allow",
+        "bash": "deny",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "verifier": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "3-module verification — citation accuracy, statistical validity, AI-pattern detection",
+      "skills": ["humanizer", "skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "allow",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "style-auditor": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Final Humanizer certification gate — 41 pattern scan, em dash zero, voice consistency",
+      "skills": ["humanizer", "skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "formatter": {
+      "model": "9router/opencode-free",
+      "variant": "fast",
+      "description": "LaTeX template formatting, BibTeX, figure embedding, PDF compilation",
+      "skills": [],
+      "permission": {
+        "bash": "allow",
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/*": "allow" },
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "heretic": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Crown jewel novelty engine. Generates 50 wild hypotheses from title+abstract, then scores against actual paper.",
+      "skills": ["skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "contrarian": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Novelty engine — inverts well-established field claims",
+      "skills": ["skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "cross-pollinator": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Novelty engine — imports solutions from distant fields",
+      "skills": [],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "assumption-excavator": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Novelty engine — enumerates and tests unstated assumptions",
+      "skills": ["skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "counterfactual-generator": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Novelty engine — rewrites field history without key papers",
+      "skills": ["skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "paradox-sifter": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Novelty engine — finds contradictions everyone ignores",
+      "skills": ["skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "theorist": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Adversarial reviewer — checks formal rigor and proofs",
+      "skills": ["skill-academic-humanizer"],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "empiricist": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Adversarial reviewer — checks experimental rigor and baselines",
+      "skills": [],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "skeptic": {
+      "model": "9router/opencode-free",
+      "variant": "fast",
+      "description": "Adversarial reviewer — default position: results are wrong",
+      "skills": [],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "methodologist": {
+      "model": "9router/opencode-free",
+      "variant": "think",
+      "description": "Adversarial reviewer — checks statistical methodology",
+      "skills": [],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    },
+    "historian": {
+      "model": "9router/opencode-free",
+      "variant": "fast",
+      "description": "Adversarial reviewer — checks prior art and citation accuracy",
+      "skills": [],
+      "permission": {
+        "read": "allow",
+        "write": { "/root/sisyphus-academica/out/papers/*": "allow" },
+        "bash": "deny",
+        "webfetch": "allow",
+        "edit": "deny",
+        "task": "deny"
+      }
+    }
+  },
+  "disabled_agents": [],
+  "agent_order": [
+    "research-director",
+    "literature-scout",
+    "writer",
+    "verifier",
+    "style-auditor",
+    "formatter",
+    "heretic",
+    "contrarian",
+    "cross-pollinator",
+    "assumption-excavator",
+    "counterfactual-generator",
+    "paradox-sifter",
+    "theorist",
+    "empiricist",
+    "skeptic",
+    "methodologist",
+    "historian"
+  ]
+}
