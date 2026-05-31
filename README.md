@@ -254,8 +254,8 @@ generation-time constraints, but the voice profile anchors the style.
 
 ## Acknowledgments
 
-- **Humanizer** by blader — the 30-pattern AI-detection skill this system builds on
-- **OpenCode** + **OhMyOpenAgent** — the agent orchestration platform
+- **[Humanizer](https://github.com/blader/humanizer)** by blader — the 30-pattern AI-detection skill this system builds on 
+- **[OpenCode](https://opencode.ai/)** + **[OhMyOpenAgent](https://omo.dev/)** — the agent orchestration platform
 - All six novelty engines were inspired by cognitive diversity research
 
 ---
