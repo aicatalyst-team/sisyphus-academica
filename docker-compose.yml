@@ -24,7 +24,7 @@ services:
   dev:
     image: python:3.11-slim
     container_name: sisyphus-dev
-    working_dir /workspace
+    working_dir: /workspace
     volumes:
       - .:/workspace
       - ~/.config/opencode:/root/.config/opencode

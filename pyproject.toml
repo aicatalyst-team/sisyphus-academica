@@ -27,6 +27,7 @@ classifiers = [
 [project.urls]
 "Source" = "https://github.com/argahv/sisyphus-academica"
 "Bug Tracker" = "https://github.com/argahv/sisyphus-academica/issues"
+"Homepage" = "https://argahv.github.io/sisyphus-academica/"
 
 [tool.setuptools]
 packages = []

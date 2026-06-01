@@ -25,6 +25,7 @@ cp .env.example .env
 
 | Page | Description |
 |------|-------------|
+| [Installation Guide](guide/installation) | Step-by-step setup for humans and LLM agents |
 | [Architecture](architecture) | System design, component roles, data flow |
 | [Pipeline Phases](pipeline) | All 10 phases: literature review → novelty → writing → review → PDF |
 | [Agent Catalog](agents) | Every agent: orchestrator, subagents, novelty engines, reviewers |

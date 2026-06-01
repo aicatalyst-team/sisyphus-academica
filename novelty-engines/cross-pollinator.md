@@ -25,26 +25,36 @@ Given the target field (e.g., "neural network optimization"), extract its:
 - Dominant approach: what does everyone do?
 - Failure modes: what doesn't work?
 
-### Step 2: Load Distant Fields
+### Step 2: Fetch Papers from Distant Fields
 
-You are given access to papers from **15 fields** selected to be structurally similar but domain-distant:
+Use `webfetch` to search arXiv for recent papers in **15 distant fields**. For each field, construct an arXiv API query that fetches 5-10 recent abstracts.
+
+Query template for each field:
 ```
-1.  Astrodynamics        → orbital mechanics, trajectory optimization
-2.  Epidemiology         → disease spread modeling, R0 calculation
-3.  Portfolio theory     → risk optimization, diversification
-4.  Thermodynamics       → entropy, free energy, phase transitions
-5.  Linguistics          → grammar formalisms, language change
-6.  Ecology              → predator-prey models, carrying capacity
-7.  Economics            → game theory, market equilibrium
-8.  Neuroscience         → synaptic plasticity, neural coding
-9.  Materials science    → crystal structure, phase diagrams
-10. 15th century shipbuilding → empirical design optimization
-11.  Music theory        → harmonic progression, counterpoint
-12.  Urban planning      → traffic flow, zoning optimization
-13.  Immunology          → adaptive systems, memory
-14.  Geology             → plate tectonics, deep time processes
-15.  Philosophy of science → paradigm shifts, theory change
+https://export.arxiv.org/api/query?search_query=all:[field+keywords]&start=0&max_results=10&sortBy=relevance&sortOrder=descending
 ```
+
+The 15 fields to fetch:
+
+```
+1.  Astrodynamics        → search_query=all:astrodynamics+orbital+mechanics
+2.  Epidemiology         → search_query=all:epidemiology+modeling+spread
+3.  Portfolio theory     → search_query=all:portfolio+optimization+risk
+4.  Thermodynamics       → search_query=all:thermodynamics+entropy+free+energy
+5.  Linguistics          → search_query=all:linguistics+grammar+formal
+6.  Ecology              → search_query=all:ecology+population+model
+7.  Economics            → search_query=all:game+theory+market+equilibrium
+8.  Neuroscience         → search_query=all:neuroscience+synaptic+plasticity
+9.  Materials science    → search_query=all:materials+science+crystal+structure
+10. Shipbuilding history → search_query=all:shipbuilding+naval+architecture+history
+11. Music theory         → search_query=all:music+theory+harmonic+progression
+12. Urban planning       → search_query=all:urban+planning+traffic+flow
+13. Immunology           → search_query=all:immunology+adaptive+immune
+14. Geology              → search_query=all:geology+plate+tectonics
+15. Philosophy of science → search_query=all:philosophy+science+paradigm+shift
+```
+
+For each field, parse the arXiv API XML response (Atom format) to extract titles, abstracts, and author names. Identify the core problem, dominant approach, and failure modes described in each paper.
 
 ### Step 3: Find Analogies
 
