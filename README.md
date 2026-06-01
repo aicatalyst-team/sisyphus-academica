@@ -42,7 +42,7 @@ Paste this prompt into Claude Code, AmpCode, Cursor, or any agent:
 
 ```
 Install and configure Sisyphus Academica by following the instructions here:
-https://github.com/argahv/sisyphus-academica/blob/main/docs/guide/installation.md
+https://raw.githubusercontent.com/argahv/sisyphus-academica/main/docs/guide/installation.md
 ```
 
 ### Manual install — one line, no agent needed
