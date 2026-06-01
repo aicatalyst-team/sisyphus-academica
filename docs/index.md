@@ -1,3 +1,8 @@
+---
+title: Home
+nav_order: 1
+---
+
 # Sisyphus Academica
 
 **Not a writing assistant. Not a chatbot with a LaTeX plugin. A self-coordinating swarm of 20+ specialized agents that produces publication-ready research papers with genuine novelty, zero hallucinated citations, and no detectable AI-written patterns.**

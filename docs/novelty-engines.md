@@ -1,3 +1,8 @@
+---
+title: Novelty Engines
+nav_order: 5
+---
+
 # Novelty Engines
 
 The novelty engines are the core differentiator. Each thinks from a completely different cognitive frame.

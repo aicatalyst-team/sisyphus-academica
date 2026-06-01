@@ -1,3 +1,8 @@
+---
+title: Agent Catalog
+nav_order: 4
+---
+
 # Agent Catalog
 
 Sisyphus Academica has 20+ agents organized into 5 groups.

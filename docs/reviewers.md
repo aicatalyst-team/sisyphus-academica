@@ -1,3 +1,8 @@
+---
+title: Adversarial Reviewers
+nav_order: 6
+---
+
 # Adversarial Reviewers
 
 Each paper is independently reviewed by 10 personas. All 10 must recommend acceptance.

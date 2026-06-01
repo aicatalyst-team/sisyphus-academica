@@ -1,3 +1,8 @@
+---
+title: Tool Reference
+nav_order: 7
+---
+
 # Tool Reference
 
 ## literature_client.py

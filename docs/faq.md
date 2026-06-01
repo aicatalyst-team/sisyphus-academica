@@ -1,3 +1,8 @@
+---
+title: FAQ
+nav_order: 8
+---
+
 # FAQ
 
 ## General

@@ -1,3 +1,8 @@
+---
+title: Pipeline Phases
+nav_order: 3
+---
+
 # Pipeline Phases
 
 The paper pipeline runs 10 sequential phases. Verification and review phases can loop back for revision.
