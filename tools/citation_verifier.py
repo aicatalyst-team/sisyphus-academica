@@ -6,15 +6,50 @@ Flags hallucinations, misattributions, and unverifiable claims.
 """
 
 import json
-import urllib.request
+import time
+import urllib.error
 import urllib.parse
+import urllib.request
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 
 SEMANTIC_SCHOLAR_API = "https://api.semanticscholar.org/graph/v1/paper"
 CROSSREF_API = "https://api.crossref.org/works"
 ARXIV_API = "http://export.arxiv.org/api/query"
+
+RETRYABLE_CODES = {429, 502, 503, 504}
+DEFAULT_MAX_RETRIES = 3
+DEFAULT_BASE_DELAY = 1.0
+
+
+def _api_request(url: str, headers: Optional[Dict] = None,
+                 timeout: int = 30, max_retries: Optional[int] = None,
+                 base_delay: float = DEFAULT_BASE_DELAY) -> Optional[bytes]:
+    """HTTP GET with exponential backoff retry for transient failures.
+
+    Retries on 429, 502, 503, 504 with delay: base_delay * 2^attempt.
+    Uses DEFAULT_MAX_RETRIES when max_retries is None.
+    Returns None if all retries exhausted.
+    """
+    if max_retries is None:
+        max_retries = DEFAULT_MAX_RETRIES
+    req = urllib.request.Request(url, headers=headers or {})
+    for attempt in range(max_retries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read()
+        except urllib.error.HTTPError as e:
+            if e.code in RETRYABLE_CODES and attempt < max_retries - 1:
+                time.sleep(base_delay * (2 ** attempt))
+                continue
+            return None
+        except (urllib.error.URLError, OSError):
+            if attempt < max_retries - 1:
+                time.sleep(base_delay * (2 ** attempt))
+                continue
+            return None
+    return None
 
 
 def search_semantic_scholar(title: str) -> Dict:
@@ -25,13 +60,14 @@ def search_semantic_scholar(title: str) -> Dict:
         'fields': 'title,authors,year,abstract,citationCount,externalIds'
     })
     url = f"{SEMANTIC_SCHOLAR_API}/search?{params}"
-    
+
+    body = _api_request(url, headers={'User-Agent': 'SisyphusAcademica/1.0'}, timeout=15)
+    if body is None:
+        return {}
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'SisyphusAcademica/1.0'})
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
+        data = json.loads(body.decode('utf-8'))
         return data.get('data', [{}])[0] if data.get('data') else {}
-    except:
+    except (json.JSONDecodeError, UnicodeDecodeError):
         return {}
 
 
@@ -43,20 +79,22 @@ def search_crossref(title: str) -> Dict:
         'select': 'DOI,title,author,container-title'
     })
     url = f"{CROSSREF_API}?{params}"
-    
+
+    body = _api_request(
+        url,
+        headers={
+            'User-Agent': 'SisyphusAcademica/1.0 (mailto:research@example.com)',
+            'Accept': 'application/json'
+        },
+        timeout=15
+    )
+    if body is None:
+        return {}
     try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                'User-Agent': 'SisyphusAcademica/1.0 (mailto:research@example.com)',
-                'Accept': 'application/json'
-            }
-        )
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
+        data = json.loads(body.decode('utf-8'))
         items = data.get('message', {}).get('items', [])
         return items[0] if items else {}
-    except:
+    except (json.JSONDecodeError, UnicodeDecodeError):
         return {}
 
 
@@ -162,12 +200,16 @@ def generate_bibtex(paper: Dict) -> str:
 
 
 def main():
+    global DEFAULT_MAX_RETRIES
     import argparse
     parser = argparse.ArgumentParser(description='Sisyphus Academica Citation Verifier')
     parser.add_argument('--findings', '-f', required=True, help='Findings JSON file')
     parser.add_argument('--output', '-o', help='Output file')
     parser.add_argument('--citation', '-c', help='Verify a single citation (overrides --findings)')
+    parser.add_argument('--retries', type=int, default=DEFAULT_MAX_RETRIES,
+                        help=f'Max retries for API calls (default: {DEFAULT_MAX_RETRIES})')
     args = parser.parse_args()
+    DEFAULT_MAX_RETRIES = args.retries
     
     if args.citation:
         result = verify_citation('manual', args.citation)
