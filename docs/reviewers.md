@@ -29,11 +29,11 @@ Typical questions: "Did you tune baselines as much as your method?" "Where's the
 
 *"You don't care about theoretical elegance or benchmark improvements of 0.5%. You care about whether this changes how systems are actually built."*
 
-Typical questions: "1% improvement at 10x cost — why?" "Has this been tested on real-world data?" "What's the simplest version that captures the benefit?"
+Typical questions: "1% improvement at 10x cost –ndash; why?" "Has this been tested on real-world data?" "What's the simplest version that captures the benefit?"
 
 ## The Skeptic
 
-**Focus:** Default position — results are wrong.
+**Focus:** Default position –ndash; results are wrong.
 
 *"Your default position is that every claim is false until proven otherwise. You don't trust the data, the methodology, or the interpretation."*
 

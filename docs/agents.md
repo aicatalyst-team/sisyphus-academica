@@ -28,7 +28,7 @@ Sisyphus Academica has 20+ agents organized into 5 groups.
 
 ## Novelty Engines
 
-Also available as **standalone portable skills** in the <code>skills/novelty-engines/</code> directory.
+Also available as **17 standalone portable skills** under the <code>skills/</code> directory — install via <code>npx skills add argahv/sisyphus-academica</code>.
 
 | Agent | Approach |
 |-------|----------|
@@ -58,11 +58,10 @@ Standalone versions also in <code>skills/reviewers/</code>.
 
 ## Skills (Portable)
 
-The <code>skills/</code> directory contains standalone SKILL.md files. Copy them to <code>~/.claude/skills/</code> and use with any agent:
+The <code>skills/</code> directory contains 17 standalone SKILL.md files. Install with a single command:
 
 ```bash
-cp -r skills/novelty-engines ~/.claude/skills/
-cp -r skills/reviewers ~/.claude/skills/
+npx skills add argahv/sisyphus-academica
 ```
 
 Invoke in any agent:

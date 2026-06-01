@@ -9,45 +9,45 @@ The novelty engines are the core differentiator. Each thinks from a completely d
 
 <div class="engine-grid">
   <div class="engine-card">
-    <div class="engine-icon">🔄</div>
+    <div class="engine-icon">C</div>
     <h3>Contrarian</h3>
     <p class="tagline">"What if the field is wrong about one fundamental assumption?"</p>
     <p>Reads the literature, extracts every "well-established" claim, inverts it across 6 axes: polarity, direction, scope, relevance, existence, priority. Outputs 10 counter-hypotheses ranked by impact if true &times; plausibility.</p>
   </div>
 
   <div class="engine-card">
-    <div class="engine-icon">🦋</div>
+    <div class="engine-icon">X</div>
     <h3>Cross-Pollinator</h3>
     <p class="tagline">"What does a completely unrelated field know about this problem?"</p>
     <p>Imports solutions from 15 unrelated fields: astrodynamics, epidemiology, portfolio theory, thermodynamics, linguistics, ecology, economics, neuroscience, materials science, music theory, urban planning, immunology, geology, philosophy of science. Extracts the mechanism, not the metaphor.</p>
   </div>
 
   <div class="engine-card">
-    <div class="engine-icon">🔍</div>
+    <div class="engine-icon">A</div>
     <h3>Assumption Excavator</h3>
     <p class="tagline">"What unstated assumptions does every paper make?"</p>
     <p>Extracts assumptions at 3 levels: explicit (stated), implicit (never stated but present), foundational (so basic the field doesn't state them). Builds assumption trees and identifies the critical 1-3 that would cause catastrophic failure if false.</p>
   </div>
 
   <div class="engine-card">
-    <div class="engine-icon">⏳</div>
+    <div class="engine-icon">G</div>
     <h3>Counterfactual Generator</h3>
     <p class="tagline">"What if the key paper had never been published?"</p>
     <p>Builds the field's history as a DAG, identifies branching points, rewrites history. Example: "What if the Transformer had failed on WMT 2014?" &rarr; No BERT, no GPT-1, LSTM research continues for years. Outputs 5 counterfactual histories with traced consequences.</p>
   </div>
 
   <div class="engine-card">
-    <div class="engine-icon">🎭</div>
+    <div class="engine-icon">P</div>
     <h3>Paradox Sifter</h3>
     <p class="tagline">"What contradictions does everyone notice but nobody resolves?"</p>
     <p>Extracts every "Limitations" and "Future Work" sentence from the entire literature. Cross-references to find contradictions, elephants in the room, and paradoxes classified as: direct contradiction, mutual ignorance, hidden dependency, or escalation.</p>
   </div>
 
   <div class="engine-card">
-    <div class="engine-icon">🔥</div>
+    <div class="engine-icon">H</div>
     <h3>Heretic (Crown Jewel)</h3>
     <p class="tagline">"What if I read only the title and abstract, then generated 50 wild guesses?"</p>
-    <p>Reads ONLY the title and abstract. Generates 50 wild hypotheses in 5 categories (methodological, theoretical, empirical, foundational, wild cards). Then reads the full paper and scores each hypothesis. The <strong>Haunting Idea</strong> is the one the authors should have explored but didn't &mdash; novelty gap &ge; 8, tractability &ge; 5, impact &ge; 7, surprise &ge; 8.</p>
+    <p>Reads ONLY the title and abstract. Generates 50 wild hypotheses in 5 categories (methodological, theoretical, empirical, foundational, wild cards). Then reads the full paper and scores each hypothesis. The <strong>Haunting Idea</strong> is the one the authors should have explored but didn't &mdash;ndash; novelty gap &ge; 8, tractability &ge; 5, impact &ge; 7, surprise &ge; 8.</p>
   </div>
 </div>
 

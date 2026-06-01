@@ -19,7 +19,7 @@ The full 10-phase pipeline uses OpenCode's agent system, but the Python tools (<
 **Q: Is there a demo I can try without installing anything?**
 
 ```bash
-pip install sisyphus-academica
+git clone https://github.com/argahv/sisyphus-academica.git && cd sisyphus-academica && pip install -e .
 sisyphus demo
 ```
 
@@ -28,13 +28,13 @@ sisyphus demo
 **Q: How do I install?**
 
 ```bash
-pip install sisyphus-academica
+git clone https://github.com/argahv/sisyphus-academica.git && cd sisyphus-academica && pip install -e .
 ```
 
 Or for the full pipeline: <code>git clone</code> + <code>bash install.sh</code> (requires OpenCode).
 
 **Q: Is there a PyPI package?**
-Yes: <code>pip install sisyphus-academica</code>. This installs the CLI tools (<code>sisyphus search</code>, <code>verify</code>, <code>bibtex</code>, <code>demo</code>, <code>configure</code>).
+Yes: <code>git clone https://github.com/argahv/sisyphus-academica.git && cd sisyphus-academica && pip install -e .</code>. This installs the CLI tools (<code>sisyphus search</code>, <code>verify</code>, <code>bibtex</code>, <code>demo</code>, <code>configure</code>).
 
 **Q: What about the portable skills?**
 The <code>skills/</code> directory contains 6 novelty engines and 5 reviewer personas as standalone SKILL.md files. Copy them to <code>~/.claude/skills/</code> to use with any agent.
