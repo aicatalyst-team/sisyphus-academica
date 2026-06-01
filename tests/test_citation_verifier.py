@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 
-from citation_verifier import verify_citation, verify_citations, generate_bibtex
+from citation_verifier import extract_citations, verify_citation, verify_citations, generate_bibtex
 
 
 class TestVerifyCitation:
@@ -70,6 +70,59 @@ class TestVerifyCitations:
         assert "hallucinated_citations" in result
         assert isinstance(result["blocked"], bool)
         assert isinstance(result["hallucinated_citations"], list)
+
+    def test_extracts_author_year_and_paren_via_extract(self):
+        text = "[Jones2019] was early. Smith (2020) improved it (Lee, 2021)."
+        result = verify_citations({"paper": text})
+        # 3 citations extracted; verify_citation hits APIs so check shape only
+        assert result["total_citations"] == 3
+        assert len(result["details"]) == 3
+
+
+class TestExtractCitations:
+    """extract_citations() — standalone extraction logic."""
+
+    def test_empty_text(self):
+        assert extract_citations("") == []
+
+    def test_no_citations(self):
+        assert extract_citations("This is plain text without any references.") == []
+
+    def test_bracket_citation(self):
+        result = extract_citations("As shown in [Smith2020].")
+        assert len(result) == 1
+        assert result[0]["key"] == "Smith2020"
+
+    def test_author_year_citation(self):
+        result = extract_citations("Smith (2020) demonstrated X.")
+        assert len(result) == 1
+        assert result[0]["key"] == "Smith2020"
+
+    def test_author_et_al_year(self):
+        result = extract_citations("Smith et al. (2020) showed Y.")
+        assert len(result) == 1
+        assert result[0]["key"] == "Smith et al.2020"
+
+    def test_parenthetical_citation(self):
+        result = extract_citations("This was confirmed (Smith, 2020).")
+        assert len(result) == 1
+        assert result[0]["key"] == "Smith2020"
+
+    def test_parenthetical_et_al(self):
+        result = extract_citations("Proposed in (Smith et al., 2020).")
+        assert len(result) == 1
+        assert result[0]["key"] == "Smith et al.2020"
+
+    def test_mixed_formats(self):
+        text = "[Jones2019] was early work, but Smith (2020) improved it (Lee, 2021)."
+        result = extract_citations(text)
+        assert len(result) == 3
+
+    def test_claim_includes_context(self):
+        text = "Prior research by Smith (2020) established the foundation."
+        result = extract_citations(text)
+        assert len(result) == 1
+        assert "Smith (2020)" in result[0]["claim"]
 
 
 class TestGenerateBibtex:

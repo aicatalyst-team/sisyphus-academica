@@ -17,6 +17,57 @@ CROSSREF_API = "https://api.crossref.org/works"
 ARXIV_API = "http://export.arxiv.org/api/query"
 
 
+def extract_citations(text: str) -> List[Dict]:
+    """Extract citations from paper text supporting multiple citation formats.
+
+    Supports:
+    - [Bracket] notation: [Smith2020], [1], [JSM2020]
+    - Author (Year): 'Smith (2020) showed that...'
+    - Author et al. (Year): 'Smith et al. (2020) showed...'
+    - (Author, Year): 'As shown in (Smith, 2020)...'
+    - (Author et al., Year): 'As shown in (Smith et al., 2020)...'
+
+    Returns list of dicts with 'key' (citation key) and 'claim' (surrounding context).
+    """
+    citations = []
+    seen_keys = set()
+
+    def add(key: str, claim: str):
+        if key and key not in seen_keys:
+            seen_keys.add(key)
+            citations.append({'key': key, 'claim': claim})
+
+    # Pattern 1: [Bracket] notation — [Smith2020], [1], [JSM2020]
+    for m in re.finditer(r'\[([^\]]+)\]', text):
+        key = m.group(1).strip()
+        start = max(0, m.start() - 40)
+        end = min(len(text), m.end() + 60)
+        claim = text[start:end].strip()
+        add(key, claim)
+
+    # Pattern 2: Author (Year) — "Smith (2020)", "Smith et al. (2020)"
+    for m in re.finditer(r'([A-Z][a-z]+(?:\s+et\s+al\.?)?)\s*\((\d{4})\)', text):
+        author = m.group(1).strip()
+        year = m.group(2)
+        key = f'{author}{year}'
+        start = max(0, m.start() - 40)
+        end = min(len(text), m.end() + 60)
+        claim = text[start:end].strip()
+        add(key, claim)
+
+    # Pattern 3: (Author, Year) — "(Smith, 2020)", "(Smith et al., 2020)"
+    for m in re.finditer(r'\(([A-Z][a-z]+(?:\s+et\s+al\.?)?),\s*(\d{4})\)', text):
+        author = m.group(1).strip()
+        year = m.group(2)
+        key = f'{author}{year}'
+        start = max(0, m.start() - 40)
+        end = min(len(text), m.end() + 60)
+        claim = text[start:end].strip()
+        add(key, claim)
+
+    return citations
+
+
 def search_semantic_scholar(title: str) -> Dict:
     """Search Semantic Scholar for a paper by title."""
     params = urllib.parse.urlencode({
@@ -110,6 +161,61 @@ def verify_citation(citation_key: str, claim: str) -> Dict:
     return result
 
 
+def extract_citations(text: str) -> List[Dict]:
+    """Extract citations from text supporting multiple citation formats.
+    
+    Supports:
+    - [Bracket] notation: [Smith2020], [1], [JSM2020]
+    - Author (Year): Smith (2020), Smith et al. (2020)
+    - (Author, Year): (Smith, 2020), (Smith et al., 2020)
+    
+    Returns list of dicts with 'key' (citation key) and 'claim' (surrounding context).
+    Duplicate keys are merged (first occurrence wins).
+    """
+    citations = []
+    seen_keys = set()
+    
+    def add_citation(key: str, claim: str):
+        if key and key not in seen_keys:
+            seen_keys.add(key)
+            citations.append({'key': key, 'claim': claim})
+    
+    # Pattern: [Bracket] notation - [Smith2020], [1], [AuthorYear2024]
+    for match in re.finditer(r'\[([^\]]+)\]', text):
+        key = match.group(1).strip()
+        start = max(0, match.start() - 40)
+        end = min(len(text), match.end() + 60)
+        claim = text[start:end].strip()
+        add_citation(key, claim)
+    
+    # Pattern 2: Author (Year) inline - "Smith (2020) showed..."
+    # Matches: "Name (2020)" optionally followed by "et al."
+    for match in re.finditer(
+        r'([A-Z][a-z]+(?:\s+et\s+al\.?)?)\s*\((\d{4})\)',
+        text
+    ):
+        author = match.group(1).strip()
+        year = match.group(2)
+        start = max(0, match.start() - 40)
+        end = min(len(text), match.end() + 60)
+        claim = text[start:end].strip()
+        add_citation(f'{author}{year}', claim)
+    
+    # Pattern 3: (Author, Year) parenthetical - "(Smith, 2020)", "(Smith et al., 2020)"
+    for match in re.finditer(
+        r'\(([A-Z][a-z]+(?:\s+et\s+al\.?)?),\s*(\d{4})\)',
+        text
+    ):
+        author = match.group(1).strip()
+        year = match.group(2)
+        start = max(0, match.start() - 40)
+        end = min(len(text), match.end() + 60)
+        claim = text[start:end].strip()
+        add_citation(f'{author}{year}', claim)
+    
+    return citations
+
+
 def verify_citations(findings: Dict) -> Dict:
     """Verify all citations in a paper findings file."""
     citations = []
@@ -117,10 +223,7 @@ def verify_citations(findings: Dict) -> Dict:
     # Extract citations from text
     if 'paper' in findings:
         text = findings['paper']
-        # Find patterns like [AuthorYear], [1], Smith et al. (2020), etc.
-        citation_patterns = re.findall(r'\[([^\]]+)\]', text)
-        for cp in citation_patterns:
-            citations.append({'key': cp, 'claim': ''})
+        citations = extract_citations(text)
     
     results = []
     for citation in citations:
