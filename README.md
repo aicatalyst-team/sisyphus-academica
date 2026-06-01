@@ -24,6 +24,45 @@ bash install.sh
 
 ---
 
+## CLI Tools (No Agent Required)
+
+The Python CLI works standalone — no OpenCode or agent platform needed:
+
+```bash
+git clone https://github.com/argahv/sisyphus-academica.git && cd sisyphus-academica
+pip install -e .
+
+sisyphus demo              # Interactive pipeline demo (no API keys)
+sisyphus search QUERY      # Search 4 academic APIs in parallel
+sisyphus verify FILE       # Verify citations in a paper JSON
+sisyphus bibtex DOI        # Generate BibTeX from a DOI
+sisyphus configure         # Set up API keys interactively
+```
+
+---
+
+## Portable Agent Skills (Works with Any Agent)
+
+The novelty engines and reviewer personas are packaged as **standalone agent skills** — drop them into any agent that reads SKILL.md (Claude Code, Codex, Cursor, Gemini CLI, OpenCode, and more):
+
+```bash
+git clone https://github.com/argahv/sisyphus-academica.git
+cp -r skills/novelty-engines ~/.claude/skills/
+cp -r skills/reviewers ~/.claude/skills/
+```
+
+Then invoke directly in your agent:
+
+```
+/contrarian "The claim: 'Attention is all you need'"
+/cross-pollinator "Problem: How to reduce LLM hallucination"
+/heretic "Paper: 'Scaling Laws for Neural Language Models'"
+```
+
+**6 novelty engines + 5 reviewer personas + academic humanizer = 12 portable skills** ready to use in any agent.
+
+---
+
 ## For Humans
 
 **Strongly recommended: let an LLM agent install this for you.** The setup involves API key configuration, agent deployment across 25 specialized agents, voice profile calibration, and provider selection — humans fat-finger these. An LLM agent reads the full guide and walks every step correctly.
@@ -244,7 +283,7 @@ sisyphus-academica/
 ├── subagents/             # Core writing pipeline agents (writer, verifier, etc.)
 ├── novelty-engines/       # 6 novelty generation agents
 ├── reviewers/             # 10 adversarial reviewer personas
-├── skills/                # Academic Humanizer skill (41 patterns)
+├── skills/                # 12 portable skill files (novelty-engines + reviewers + academic humanizer)
 ├── tools/                 # Python CLI toolchain
 │   ├── literature_client.py    # Multi-source lit search
 │   └── citation_verifier.py    # Citation verification + BibTeX
@@ -276,6 +315,7 @@ docker compose --profile latex run latex pdflatex out/papers/paper.tex
 ## Acknowledgments
 
 - **[Humanizer](https://github.com/blader/humanizer)** by blader — the 30-pattern AI-detection skill this system builds on
+- **[Novelty Skills](https://github.com/argahv/novelty-skills)** — standalone thinking tools for AI agents (separate repo)
 - **[OpenCode](https://opencode.ai/)** + **[OhMyOpenAgent](https://omo.dev/)** — agent orchestration platform
 - All six novelty engines were inspired by cognitive diversity research
 
