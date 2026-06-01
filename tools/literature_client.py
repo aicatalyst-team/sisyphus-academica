@@ -11,6 +11,7 @@ import urllib.request
 import urllib.parse
 import xml.etree.ElementTree as ET
 from typing import List, Dict, Optional
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 ARXIV_API = "http://export.arxiv.org/api/query"
@@ -22,6 +23,28 @@ ARXIV_NS = {
     'atom': 'http://www.w3.org/2005/Atom',
     'arxiv': 'http://arxiv.org/schemas/atom'
 }
+
+
+def _fetch_json(url: str, timeout: int = 30) -> Optional[Dict]:
+    """Fetch JSON from a URL with standard headers."""
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'SisyphusAcademica/1.0'})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode('utf-8'))
+    except Exception as e:
+        print(f"  HTTP error for {url[:60]}: {e}")
+        return None
+
+
+def _fetch_text(url: str, timeout: int = 30) -> Optional[str]:
+    """Fetch text from a URL."""
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'SisyphusAcademica/1.0'})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.read().decode('utf-8')
+    except Exception as e:
+        print(f"  HTTP error for {url[:60]}: {e}")
+        return None
 
 
 def search_arxiv(query: str, max_results: int = 200) -> List[Dict]:
@@ -206,26 +229,44 @@ def deduplicate_papers(all_papers: List[Dict]) -> List[Dict]:
     return unique
 
 
-def search_all(query: str) -> Dict:
-    """Search all sources in parallel (simulated sequential for API limits)."""
+def search_all(query: str, parallel: bool = True) -> Dict:
+    """Search all sources, optionally in parallel via ThreadPoolExecutor."""
     results = {}
     
     print(f"  Searching all sources for: {query}")
     
-    results['arxiv'] = search_arxiv(query)
-    time.sleep(3)  # Rate limit: arXiv is ~1 req/3s
-    print(f"    arXiv: {len(results['arxiv'])} papers")
-    
-    results['semantic_scholar'] = search_semantic_scholar(query)
-    time.sleep(1)
-    print(f"    Semantic Scholar: {len(results['semantic_scholar'])} papers")
-    
-    results['crossref'] = search_crossref(query)
-    time.sleep(1)
-    print(f"    CrossRef: {len(results['crossref'])} papers")
-    
-    results['openalex'] = search_openalex(query)
-    print(f"    OpenAlex: {len(results['openalex'])} papers")
+    if parallel:
+        sources = {
+            'arxiv': lambda: search_arxiv(query),
+            'semantic_scholar': lambda: search_semantic_scholar(query),
+            'crossref': lambda: search_crossref(query),
+            'openalex': lambda: search_openalex(query),
+        }
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            futures = {pool.submit(fn): name for name, fn in sources.items()}
+            for future in as_completed(futures):
+                name = futures[future]
+                try:
+                    results[name] = future.result()
+                    print(f"    {name}: {len(results[name])} papers")
+                except Exception as e:
+                    print(f"    {name} failed: {e}")
+                    results[name] = []
+    else:
+        results['arxiv'] = search_arxiv(query)
+        time.sleep(3)
+        print(f"    arXiv: {len(results['arxiv'])} papers")
+        
+        results['semantic_scholar'] = search_semantic_scholar(query)
+        time.sleep(1)
+        print(f"    Semantic Scholar: {len(results['semantic_scholar'])} papers")
+        
+        results['crossref'] = search_crossref(query)
+        time.sleep(1)
+        print(f"    CrossRef: {len(results['crossref'])} papers")
+        
+        results['openalex'] = search_openalex(query)
+        print(f"    OpenAlex: {len(results['openalex'])} papers")
     
     # Merge and deduplicate
     all_papers = []

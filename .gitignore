@@ -15,6 +15,12 @@ setup-*.log
 __pycache__/
 *.pyc
 *.pyo
+.pytest_cache/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
 
 # LaTeX artifacts
 *.aux
