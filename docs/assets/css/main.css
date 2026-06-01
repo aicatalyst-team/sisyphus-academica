@@ -688,6 +688,106 @@ li {
   }
 }
 
+/* --- Proof Bar --- */
+.proof-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-base);
+  background: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--muted);
+  margin: var(--space-lg) 0;
+  flex-wrap: wrap;
+}
+
+.proof-badge {
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.proof-link {
+  font-size: 13px;
+}
+
+/* --- Quality Gates (updated) --- */
+.gate-list {
+  display: grid;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
+}
+
+.gate-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-base);
+  padding: var(--space-base) var(--space-lg);
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.gate-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  background: var(--success);
+  color: var(--on-primary);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.gate-item strong {
+  color: var(--ink);
+}
+
+/* --- Architecture Diagram (responsive) --- */
+.arch-wrapper {
+  margin: var(--space-lg) 0;
+}
+
+.arch-diagram {
+  background: var(--surface-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  font-family: var(--font-code);
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+@media (max-width: 640px) {
+  .arch-diagram {
+    font-size: 8px;
+    padding: var(--space-sm);
+  }
+}
+
+/* --- Tab containers --- */
+.install-tabs {
+  margin: var(--space-lg) 0;
+}
+
+.tab-content .demo-block {
+  margin: var(--space-sm) 0;
+}
+
 /* --- Utility --- */
 .mono {
   font-family: var(--font-code);

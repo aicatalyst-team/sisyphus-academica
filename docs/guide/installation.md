@@ -5,54 +5,46 @@ title: Installation Guide
 
 # Installation Guide
 
-## Quick Install (Python package)
+## Python CLI Tools
 
-The Python CLI tools (literature search, citation verification, demo) install in one command:
+```bash
+git clone https://github.com/argahv/sisyphus-academica.git
+cd sisyphus-academica
+pip install -e .
 
-<div class="demo-block">
-  <div class="cmd"><span class="prompt">$</span> <span class="input">pip install sisyphus-academica</span></div>
-  <div class="cmd"><span class="prompt">$</span> <span class="input">sisyphus demo</span></div>
-  <div class="cmd"><span class="prompt">$</span> <span class="input">academica configure</span></div>
-</div>
-
-<div class="info-box">
-  <h4>No API keys needed to start</h4>
-  <p>The <code class="language-plaintext highlighter-rouge">sisyphus demo</code> command runs entirely offline with built-in example data. Configure API keys only when you need live literature searches.</p>
-</div>
-
-## Full Pipeline Install (OpenCode agents)
-
-For the complete 10-phase paper pipeline (literature review → novelty generation → writing → review → PDF), you need an agent platform:
-
-<div class="demo-block">
-  <div class="cmd"><span class="prompt">$</span> <span class="input">git clone https://github.com/argahv/sisyphus-academica.git</span></div>
-  <div class="cmd"><span class="prompt">$</span> <span class="input">cd sisyphus-academica</span></div>
-  <div class="cmd"><span class="prompt">$</span> <span class="input">bash install.sh</span></div>
-</div>
-
-Then open OpenCode, select the **research-director** agent, and type:
-
-```
-write a paper about [your topic]
+sisyphus demo              # Interactive pipeline demo (no API keys needed)
+sisyphus search QUERY      # Search 4 academic APIs in parallel
+sisyphus verify FILE       # Verify citations in a paper JSON
+sisyphus bibtex DOI        # Generate BibTeX from a DOI
+sisyphus configure         # Set up API keys interactively
 ```
 
-## Portable Skills (any agent)
+## Agent Skills (Any Agent)
 
-The novelty engines and reviewer personas work as standalone agent skills with any agent that reads the SKILL.md format (Claude Code, Codex, Cursor, Gemini CLI):
+Install via the standard skills CLI:
 
-<div class="demo-block">
-  <div class="cmd"><span class="prompt">$</span> <span class="input">git clone https://github.com/argahv/sisyphus-academica</span></div>
-  <div class="cmd"><span class="prompt">$</span> <span class="input">cp -r skills/novelty-engines ~/.claude/skills/</span></div>
-  <div class="cmd"><span class="prompt">$</span> <span class="input">cp -r skills/reviewers ~/.claude/skills/</span></div>
-</div>
-
-Then invoke in any agent:
-
+```bash
+npx skills add argahv/sisyphus-academica          # Browse and select
+npx skills add argahv/sisyphus-academica -s '*'   # Install all 17
+npx skills add argahv/novelty-skills               # Standalone thinking tools
 ```
-/contrarian "The claim: 'Attention is all you need'"
-/cross-pollinator "Problem: How to reduce LLM hallucination"
-/heretic "Paper: 'Scaling Laws for Neural Language Models'"
+
+Or clone and copy manually:
+
+```bash
+git clone https://github.com/argahv/sisyphus-academica
+cp -r skills/contrarian ~/.claude/skills/
 ```
+
+## Full Paper Pipeline (OpenCode)
+
+```bash
+git clone https://github.com/argahv/sisyphus-academica.git
+cd sisyphus-academica
+bash install.sh
+```
+
+Select "research-director" from the agent tab and type: `write a paper about [topic]`
 
 ## Requirements
 
@@ -60,7 +52,7 @@ Then invoke in any agent:
 |-----------|-------------|
 | Python CLI tools | Python 3.10+ |
 | Full pipeline | OpenCode (or compatible agent platform) |
-| PDF output | LaTeX (optional — Docker image available) |
+| PDF output | LaTeX (optional — Docker image) |
 | Literature search | Semantic Scholar API key (free, recommended) |
 
 ## Development
@@ -74,5 +66,5 @@ python -m pytest tests/ -v
 
 <div class="button-group">
   <a href="https://github.com/argahv/sisyphus-academica" class="btn-primary">GitHub Repository</a>
-  <a href="https://github.com/argahv/sisyphus-academica/issues" class="btn-secondary">Report Issue</a>
+  <a href="https://github.com/argahv/novelty-skills" class="btn-secondary">Novelty Skills</a>
 </div>
