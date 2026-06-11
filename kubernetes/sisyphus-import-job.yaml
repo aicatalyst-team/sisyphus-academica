@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sisyphus-import
+  namespace: poc-sisyphus-academica
+  labels:
+    app: sisyphus-academica
+    autopoc.io/project: sisyphus-academica
+    autopoc.io/scenario: module-import
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      containers:
+        - name: sisyphus-academica
+          image: quay.io/aicatalyst/sisyphus-academica:latest
+          imagePullPolicy: Always
+          command: ["python"]
+          args: ["-c", "from sisyphus.tools.literature_client import search_all; from sisyphus.tools.citation_verifier import verify_citation; print('Core tools loaded')"]
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      imagePullSecrets:
+        - name: quay-pull
+      restartPolicy: Never

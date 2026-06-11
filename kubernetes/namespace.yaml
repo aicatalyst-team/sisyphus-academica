@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: poc-sisyphus-academica
+  labels:
+    app.kubernetes.io/name: sisyphus-academica
+    app.kubernetes.io/managed-by: autopoc
