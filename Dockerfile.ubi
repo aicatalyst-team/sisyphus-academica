@@ -14,9 +14,6 @@ RUN chown -R 1001:0 /opt/app-root
 # Switch to default user for pip install
 USER 1001
 
-# Upgrade setuptools for compatibility with setuptools.backends._legacy
-RUN pip install --no-cache-dir --upgrade setuptools pip
-
 # Install the package (minimal deps - core tools use stdlib only)
 RUN pip install --no-cache-dir .
 
