@@ -1,0 +1,29 @@
+FROM registry.access.redhat.com/ubi9/python-312
+
+WORKDIR /opt/app-root/src
+
+# Switch to root for file operations
+USER 0
+
+# Copy all application source
+COPY . .
+
+# Fix permissions so pip can write egg-info
+RUN chown -R 1001:0 /opt/app-root
+
+# Switch to default user for pip install
+USER 1001
+
+# Install the package (minimal deps - core tools use stdlib only)
+RUN pip install --no-cache-dir .
+
+# OpenShift compatibility
+USER 0
+RUN chgrp -R 0 /opt/app-root && chmod -R g=u /opt/app-root
+
+# No EXPOSE - CLI tool does not listen on ports
+
+USER 1001
+
+ENTRYPOINT ["academica"]
+CMD ["demo"]
